@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "me.impurity.sevcheat.mixin.mixins",
+  "refmap": "mixins.sevcheat.refmap.json",
+  "minVersion": "0.7.3",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ICPacketChatMessage",
+    "MixinGuiShulkerBox",
+    "MixinMinecraft",
+    "MixinNetworkManager"
+  ],
+  "client": [
+    "MixinGuiIngame",
+    "MixinGuiMainMenu"
+  ]
+}
