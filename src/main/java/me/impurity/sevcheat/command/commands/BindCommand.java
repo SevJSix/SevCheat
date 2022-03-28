@@ -38,17 +38,5 @@ public class BindCommand extends Command {
         }
     }
 
-    private void sendAllModules() {
-        StringBuilder builder = new StringBuilder();
-        AtomicInteger index = new AtomicInteger();
-        SevCheat.moduleManager.getModules().forEach(m -> {
-            index.getAndIncrement();
-            if (index.get() == SevCheat.moduleManager.getModules().size()) {
-                builder.append(m.getName());
-                return;
-            }
-            builder.append(m.getName()).append(", ");
-        });
-        Utils.sendMessage("Available Modules: " + builder);
-    }
+
 }

@@ -1,13 +1,15 @@
 package me.impurity.sevcheat.module;
 
-import me.impurity.sevcheat.util.Utils;
+import me.impurity.sevcheat.util.FileUtil;
+import me.impurity.sevcheat.util.McWrapper;
+import me.impurity.sevcheat.util.MessageUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
-public abstract class Module {
+public abstract class Module implements McWrapper {
 
     private final String name;
     private final Category category;
@@ -60,7 +62,13 @@ public abstract class Module {
     public void onTick() {
     }
 
+    public void onQuickUpdate() {
+    }
+
     public void onRender2d() {
+    }
+
+    public void onRender3d() {
     }
 
     public boolean isEnabled() {
@@ -75,14 +83,20 @@ public abstract class Module {
         this.setEnabled(true);
         MinecraftForge.EVENT_BUS.register(this);
         this.onEnable();
-        Utils.sendMessage(TextFormatting.GRAY + name + TextFormatting.GREEN + " enabled.");
+        FileUtil.saveModules();
+        if (mc.world != null) {
+            MessageUtil.sendMessage(TextFormatting.GRAY + "{}" + TextFormatting.GREEN + " enabled.", name);
+        }
     }
 
     public void disable() {
         this.setEnabled(false);
         MinecraftForge.EVENT_BUS.unregister(this);
         this.onDisable();
-        Utils.sendMessage(TextFormatting.GRAY + name + TextFormatting.RED + " disabled.");
+        FileUtil.saveModules();
+        if (mc.world != null) {
+            MessageUtil.sendMessage(TextFormatting.GRAY + "{}" + TextFormatting.RED + " disabled.", name);
+        }
     }
 
     public String getName() {

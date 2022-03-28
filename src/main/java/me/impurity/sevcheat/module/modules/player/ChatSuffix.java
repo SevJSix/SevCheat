@@ -7,6 +7,9 @@ import me.impurity.sevcheat.module.Module;
 import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
+import scala.actors.threadpool.Arrays;
+
+import java.util.List;
 
 public class ChatSuffix extends Module {
 
@@ -22,6 +25,7 @@ public class ChatSuffix extends Module {
 
     @SubscribeEvent
     public void onPacketSend(PacketSendingEvent event) {
+        if (mc.world == null) return;
         if (event.getPacket() instanceof CPacketChatMessage) {
             CPacketChatMessage packet = (CPacketChatMessage) event.getPacket();
             String msg = packet.getMessage();

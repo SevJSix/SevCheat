@@ -1,14 +1,27 @@
 package me.impurity.sevcheat.module.modules.combat;
 
 import io.netty.buffer.Unpooled;
+import jdk.nashorn.internal.ir.Block;
+import me.impurity.sevcheat.SevCheat;
+import me.impurity.sevcheat.event.PacketRecievingEvent;
 import me.impurity.sevcheat.module.Category;
 import me.impurity.sevcheat.module.Module;
 import me.impurity.sevcheat.util.TimerUtil;
 import me.impurity.sevcheat.util.Utils;
-import net.minecraft.client.gui.GuiHopper;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.client.CPacketChatMessage;
+import net.minecraft.network.play.client.CPacketClickWindow;
 import net.minecraft.network.play.client.CPacketCustomPayload;
+import net.minecraft.network.play.server.SPacketCustomPayload;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import java.util.Arrays;
 
 public class ServersideAuto32k extends Module {
 
@@ -20,12 +33,14 @@ public class ServersideAuto32k extends Module {
 
     @Override
     public void onEnable() {
+        if (mc.world == null) return;
         try {
             timer.reset();
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeBlockPos(mc.objectMouseOver.getBlockPos());
             CPacketCustomPayload packet = new CPacketCustomPayload(Utils.getChannelPayload(), buffer);
             mc.player.connection.sendPacket(packet);
+            mc.player.swingArm(EnumHand.MAIN_HAND);
         } catch (Throwable t) {
             Utils.sendMessage("An error occurred, disabling...");
             this.disable();
@@ -34,20 +49,23 @@ public class ServersideAuto32k extends Module {
 
     @Override
     public void onTick() {
+        if (mc.world == null) return;
         try {
-            if (timer.hasReached(500) && this.isEnabled()) {
+            if (timer.hasReached(3000) && this.isEnabled()) {
                 timer.reset();
                 this.disable();
-                return;
             }
-            mc.player.swingArm(EnumHand.MAIN_HAND);
-            if (mc.currentScreen != null && mc.currentScreen instanceof GuiHopper) {
-                mc.player.closeScreen();
-                this.disable();
+            if (mc.currentScreen != null) {
+                if (!((GuiContainer) mc.currentScreen).inventorySlots.getSlot(0).getStack().isEmpty()) {
+                    mc.player.inventory.currentItem = 8;
+                    mc.playerController.windowClick(mc.player.openContainer.windowId, 0, mc.player.inventory.currentItem, ClickType.SWAP, mc.player);
+                    if (!SevCheat.moduleManager.getModuleByName("SecretClose").isEnabled())
+                        SevCheat.moduleManager.getModuleByName("SecretClose").enable();
+                    mc.player.closeScreen();
+                    this.disable();
+                }
             }
-        } catch (Throwable t) {
-            Utils.sendMessage("An error occurred, disabling...");
-            this.disable();
+        } catch (Throwable ignored) {
         }
     }
 }

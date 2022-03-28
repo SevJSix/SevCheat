@@ -6,12 +6,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "ICPacketChatMessage",
-    "MixinGuiShulkerBox",
-    "MixinMinecraft",
+    "ICPacketPlayer",
     "MixinNetworkManager"
-  ],
-  "client": [
-    "MixinGuiIngame",
-    "MixinGuiMainMenu"
   ]
 }

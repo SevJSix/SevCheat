@@ -1,4 +1,4 @@
-package me.impurity.sevcheat.module.modules.render;
+package me.impurity.sevcheat.module.modules.hud;
 
 import me.impurity.sevcheat.SevCheat;
 import me.impurity.sevcheat.module.Category;
@@ -16,7 +16,7 @@ public class HUD extends Module {
     @Override
     public void onRender2d() {
         ScaledResolution res = new ScaledResolution(mc);
-        mc.fontRenderer.drawStringWithShadow("SevCheat b1", 1, 1, Utils.rainbow());
+        mc.fontRenderer.drawStringWithShadow("SevCheat v" + SevCheat.VERSION, 1, 1, Utils.rainbow());
         int y = 2;
         for (Module module : SevCheat.moduleManager.getActiveModules()) {
             if (!module.getName().equalsIgnoreCase("")) {

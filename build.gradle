@@ -5,13 +5,18 @@ buildscript {
             name = "forge"
             url = "https://files.minecraftforge.net/maven"
         }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
-        maven { url = 'https://plugins.gradle.org/m2' }
+        maven {
+            name = 'SpongePowered'
+            url = 'https://repo.spongepowered.org/maven'
+        }
+        maven {
+            url = 'https://plugins.gradle.org/m2'
+        }
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
-        classpath 'org.spongepowered:mixingradle:0.4-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
     }
 }
 
@@ -20,7 +25,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'me.impurity'
-version = 'v1.1-BETA'
+version = 'v1.2.7-BETA'
 archivesBaseName = 'SevCheat'
 
 sourceCompatibility = targetCompatibility = '1.8'
@@ -60,14 +65,10 @@ dependencies {
     }
 }
 
-mixin {
-    add sourceSets.main, 'mixins.sevcheat.refmap.json'
-}
-
 shadowJar {
 
     dependencies {
-        include(dependency('org.spongepowered:mixin:0.7.11-SNAPSHOT'))
+        include(dependency('org.spongepowered:mixin'))
     }
 
     exclude 'dummyThing'
@@ -75,6 +76,10 @@ shadowJar {
     classifier = ''
 }
 build.dependsOn(shadowJar)
+
+mixin {
+    add sourceSets.main, 'mixins.sevcheat.refmap.json'
+}
 
 reobf {
     shadowJar {
