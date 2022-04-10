@@ -18,7 +18,7 @@ public class SevCheat {
 
     public static final String MOD_ID = "sevcheat";
     public static final String MOD_NAME = "SevCheat";
-    public static final String VERSION = "1.2.7";
+    public static final String VERSION = "1.2.8";
     public static ModuleManager moduleManager;
     @Mod.Instance(MOD_ID)
     public static SevCheat INSTANCE;

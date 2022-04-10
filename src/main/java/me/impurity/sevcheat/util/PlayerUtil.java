@@ -1,12 +1,18 @@
 package me.impurity.sevcheat.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PlayerUtil implements McWrapper {
+
+    public static final List<Block> shulkerList = Arrays.asList(Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.SILVER_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX);
 
     public static boolean holdingItem(Class clazz) {
         boolean result = false;
@@ -52,8 +58,24 @@ public class PlayerUtil implements McWrapper {
             final ItemStack is = mc.player.inventory.getStackInSlot(i);
             if (is != ItemStack.EMPTY) {
                 final Item it = is.getItem();
-                if (it instanceof ItemBlock && ((ItemBlock)it).getBlock().equals(block)) {
+                if (it instanceof ItemBlock && ((ItemBlock) it).getBlock().equals(block)) {
                     return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static int findShulker() {
+        for (int i = 0; i < 9; ++i) {
+            ItemStack itemStack = mc.player.inventory.getStackInSlot(i);
+            if (itemStack != ItemStack.EMPTY) {
+                Item item = itemStack.getItem();
+                if (item instanceof ItemBlock) {
+                    ItemBlock block = (ItemBlock) item;
+                    if (shulkerList.contains(block.getBlock())) {
+                        return i;
+                    }
                 }
             }
         }

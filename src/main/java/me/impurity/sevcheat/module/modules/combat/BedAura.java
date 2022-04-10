@@ -55,7 +55,7 @@ public class BedAura extends Module {
     }
 
     @Override
-    public void onTick() {
+    public void onUpdate() {
         if (mc.world == null) return;
         this.bedSlot = PlayerUtil.find(Items.BED);
         if (bedSlot == -1) {

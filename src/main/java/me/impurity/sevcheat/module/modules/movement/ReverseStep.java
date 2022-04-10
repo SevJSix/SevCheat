@@ -11,7 +11,7 @@ public class ReverseStep extends Module {
     }
 
     @Override
-    public void onTick() {
+    public void onUpdate() {
         if (mc.world == null) return;
         if (mc.player.isInLava() || mc.player.isInWater() || !mc.player.onGround) return;
         IBlockState touchState = mc.world.getBlockState(new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ).down(2));

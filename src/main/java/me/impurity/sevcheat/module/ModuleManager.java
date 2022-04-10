@@ -52,6 +52,7 @@ public class ModuleManager implements McWrapper {
         addModule(new HoleEsp());
         addModule(new BedAura());
         addModule(new AutoTrapBed());
+        addModule(new Auto32k());
         getModuleByName("HUD").setEnabled(true);
     }
 
@@ -104,7 +105,7 @@ public class ModuleManager implements McWrapper {
     public void onTick(TickEvent.ClientTickEvent event) {
         modules.forEach(module -> {
             if (module.isEnabled()) {
-                module.onTick();
+                module.onUpdate();
             }
         });
     }

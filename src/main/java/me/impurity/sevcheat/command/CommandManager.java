@@ -27,6 +27,7 @@ public class CommandManager {
         this.commands.add(new FriendCommand(this));
         this.commands.add(new FakePlayerCommand());
         this.commands.add(new HoleEspCommand());
+        this.commands.add(new Auto32kMode());
     }
 
     public String getPrefix() {

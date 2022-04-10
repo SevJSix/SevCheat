@@ -19,7 +19,7 @@ public class Aura32k extends Module {
     }
 
     @Override
-    public void onTick() {
+    public void onUpdate() {
         if (mc.world == null) return;
         if (!Utils.is32k(mc.player.inventory.getCurrentItem())) return;
         for (EntityPlayer player : mc.world.playerEntities) {

@@ -48,7 +48,7 @@ public class ServersideAuto32k extends Module {
     }
 
     @Override
-    public void onTick() {
+    public void onUpdate() {
         if (mc.world == null) return;
         try {
             if (timer.hasReached(3000) && this.isEnabled()) {

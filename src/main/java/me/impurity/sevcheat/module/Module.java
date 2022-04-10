@@ -59,7 +59,7 @@ public abstract class Module implements McWrapper {
     public void onDisable() {
     }
 
-    public void onTick() {
+    public void onUpdate() {
     }
 
     public void onQuickUpdate() {
