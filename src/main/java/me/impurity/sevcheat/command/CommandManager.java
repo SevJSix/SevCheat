@@ -1,6 +1,7 @@
 package me.impurity.sevcheat.command;
 
 import me.impurity.sevcheat.command.commands.*;
+import me.impurity.sevcheat.event.PacketEvent;
 import me.impurity.sevcheat.event.PacketSendingEvent;
 import me.impurity.sevcheat.util.Utils;
 import net.minecraft.network.play.client.CPacketChatMessage;
@@ -16,6 +17,7 @@ public class CommandManager {
 
     private final List<Command> commands = new ArrayList<>();
     private String prefix = ".";
+
     public CommandManager() {
         MinecraftForge.EVENT_BUS.register(this);
         this.commands.add(new Auto32kChannelCommand());
@@ -28,6 +30,7 @@ public class CommandManager {
         this.commands.add(new FakePlayerCommand());
         this.commands.add(new HoleEspCommand());
         this.commands.add(new Auto32kMode());
+        this.commands.add(new CrashMode());
     }
 
     public String getPrefix() {

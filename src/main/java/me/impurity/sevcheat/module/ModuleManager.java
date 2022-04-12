@@ -1,9 +1,11 @@
 package me.impurity.sevcheat.module;
 
+import me.impurity.sevcheat.event.PacketEvent;
 import me.impurity.sevcheat.event.PacketRecievingEvent;
 import me.impurity.sevcheat.event.TotemPopEvent;
 import me.impurity.sevcheat.module.modules.combat.*;
 import me.impurity.sevcheat.module.modules.exploit.SecretClose;
+import me.impurity.sevcheat.module.modules.exploit.SevCrasher;
 import me.impurity.sevcheat.module.modules.exploit.Velocity;
 import me.impurity.sevcheat.module.modules.hud.ClickGui;
 import me.impurity.sevcheat.module.modules.hud.HUD;
@@ -53,6 +55,7 @@ public class ModuleManager implements McWrapper {
         addModule(new BedAura());
         addModule(new AutoTrapBed());
         addModule(new Auto32k());
+        addModule(new SevCrasher());
         getModuleByName("HUD").setEnabled(true);
     }
 
@@ -116,8 +119,7 @@ public class ModuleManager implements McWrapper {
             if (mc.world != null && mc.player != null) {
                 try {
                     m.onQuickUpdate();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -156,8 +158,7 @@ public class ModuleManager implements McWrapper {
             if (mc.world != null && mc.player != null) {
                 try {
                     m.onRender3d();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

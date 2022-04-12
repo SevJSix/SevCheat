@@ -32,6 +32,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Auto32k extends Module {
 
     public static boolean autoPlace = false;
+    public static boolean renderPlace = false;
+    public static Mode mode = Mode.DISPENSER;
     private final TimerUtil timer = new TimerUtil();
     private final TimerUtil timer2 = new TimerUtil();
     private int stage;
@@ -80,13 +82,13 @@ public class Auto32k extends Module {
             disable();
             return;
         }
-        if (obsidianSlot == -1) {
+        if (obsidianSlot == -1 && mode == Mode.DISPENSER) {
             Utils.sendMessage(ChatFormatting.RED + "missing obsidian from hotbar");
             disable();
-        } else if (dispenserSlot == -1) {
+        } else if (dispenserSlot == -1 && mode == Mode.DISPENSER) {
             Utils.sendMessage(ChatFormatting.RED + "missing dispenser from hotbar");
             disable();
-        } else if (redstoneSlot == -1) {
+        } else if (redstoneSlot == -1 && mode == Mode.DISPENSER) {
             Utils.sendMessage(ChatFormatting.RED + "missing redstone from hotbar");
             disable();
         } else if (shulkerSlot == -1) {
@@ -113,7 +115,24 @@ public class Auto32k extends Module {
             return;
         }
 
-        if (stage == 0) {
+        if (mode == Mode.HOPPER && stage == 0) {
+            switchSlot(hopperSlot);
+            this.hopperPos = this.obsidianPos;
+            BlockUtil.placeBlock(this.hopperPos, EnumHand.MAIN_HAND, true, false);
+            if (mc.world.getBlockState(this.hopperPos).getBlock().equals(Blocks.HOPPER)) {
+                mc.player.connection.sendPacket(new CPacketPlayer.Rotation(AutoUtil.getYaw(this.facing), 0.0f, mc.player.onGround));
+                switchSlot(shulkerSlot);
+                BlockUtil.placeBlock(AutoUtil.clone(this.hopperPos, 0, 1, 0), EnumHand.MAIN_HAND, true, false);
+                BlockUtil.clickBlock(this.hopperPos);
+                this.stage = 5;
+                return;
+            } else {
+                Utils.sendMessage(ChatFormatting.RED + "Hopper fucked up");
+                disable();
+            }
+        }
+
+        if (stage == 0 && mode == Mode.DISPENSER) {
             switchSlot(obsidianSlot);
             BlockUtil.placeBlock(this.obsidianPos, EnumHand.MAIN_HAND, true, false);
             if (mc.world.getBlockState(this.obsidianPos).getBlock().equals(Blocks.OBSIDIAN)) {
@@ -125,7 +144,7 @@ public class Auto32k extends Module {
             return;
         }
 
-        if (stage == 1) {
+        if (stage == 1 && mode == Mode.DISPENSER) {
             switchSlot(dispenserSlot);
             mc.player.connection.sendPacket(new CPacketPlayer.Rotation(AutoUtil.getYaw(this.facing), 0.0f, mc.player.onGround));
             BlockUtil.placeBlock(this.dispenserPos, EnumHand.MAIN_HAND, false, false);
@@ -139,7 +158,7 @@ public class Auto32k extends Module {
             return;
         }
 
-        if (stage == 2) {
+        if (stage == 2 && mode == Mode.DISPENSER) {
             if (mc.world.getBlockState(this.dispenserPos).getBlock().equals(Blocks.DISPENSER)) {
                 if (mc.currentScreen instanceof GuiDispenser) {
                     mc.playerController.windowClick(mc.player.openContainer.windowId, 0, this.shulkerSlot, ClickType.SWAP, mc.player);
@@ -152,7 +171,7 @@ public class Auto32k extends Module {
             }
         }
 
-        if (stage == 3) {
+        if (stage == 3 && mode == Mode.DISPENSER) {
             switchSlot(redstoneSlot);
             BlockUtil.placeBlock(this.redstonePos, EnumHand.MAIN_HAND, true, false);
             if (mc.currentScreen != null) {
@@ -162,7 +181,7 @@ public class Auto32k extends Module {
             return;
         }
 
-        if (stage == 4) {
+        if (stage == 4 && mode == Mode.DISPENSER) {
             switchSlot(hopperSlot);
             EnumFacing dir = this.facing.getOpposite();
             this.hopperPos = AutoUtil.getHopperPos(dispenserPos, dir);
@@ -194,22 +213,24 @@ public class Auto32k extends Module {
 
     @Override
     public void onRender3d() {
-        if (this.obsidianPos != null) {
-            GraphicUtil.drawBlockOutline(this.obsidianPos, 1.0D, new Color(1.0F, 0.0F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.5F, 1.0F));
-            GraphicUtil.drawFilledBox(this.obsidianPos, 1.0D, new Color(1.0F, 0.0F, 0.4F));
-        }
-        if (this.dispenserPos != null) {
-            GraphicUtil.drawBlockOutline(AutoUtil.clone(dispenserPos, 0, -1, 0), 1.0D, new Color(1.0F, 0.0F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.5F, 1.0F));
-            GraphicUtil.drawFilledBox(AutoUtil.clone(dispenserPos, 0, -1, 0), 1.0D, new Color(1.0F, 0.0F, 0.4F));
-        }
-        if (this.redstonePos != null) {
-            GraphicUtil.drawBlockOutline(AutoUtil.clone(redstonePos, 0, -1, 0), 1.0D, new Color(1.0F, 0.0F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.5F, 1.0F));
-            GraphicUtil.drawFilledBox(AutoUtil.clone(redstonePos, 0, -1, 0), 1.0D, new Color(1.0F, 0.0F, 0.4F));
-        }
-        if (this.hopperPos != null) {
-            GraphicUtil.drawBlockOutline(this.hopperPos, 1.0D, new Color(1.0F, 0.0F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.5F, 1.0F));
-            GraphicUtil.drawFilledBox(this.hopperPos, 1.0D, new Color(1.0F, 0.0F, 0.4F));
+        if (renderPlace) {
+            if (this.obsidianPos != null) {
+                GraphicUtil.drawBlockOutline(this.obsidianPos, 1.0D, new Color(1.0F, 0.0F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.5F, 1.0F));
+                GraphicUtil.drawFilledBox(this.obsidianPos, 1.0D, new Color(1.0F, 0.0F, 0.4F));
+            }
+            if (this.dispenserPos != null) {
+                GraphicUtil.drawBlockOutline(AutoUtil.clone(dispenserPos, 0, -1, 0), 1.0D, new Color(1.0F, 0.0F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.5F, 1.0F));
+                GraphicUtil.drawFilledBox(AutoUtil.clone(dispenserPos, 0, -1, 0), 1.0D, new Color(1.0F, 0.0F, 0.4F));
+            }
+            if (this.redstonePos != null) {
+                GraphicUtil.drawBlockOutline(AutoUtil.clone(redstonePos, 0, -1, 0), 1.0D, new Color(1.0F, 0.0F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.5F, 1.0F));
+                GraphicUtil.drawFilledBox(AutoUtil.clone(redstonePos, 0, -1, 0), 1.0D, new Color(1.0F, 0.0F, 0.4F));
+            }
+            if (this.hopperPos != null) {
+                GraphicUtil.drawBlockOutline(this.hopperPos, 1.0D, new Color(1.0F, 0.0F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.5F, 1.0F));
+                GraphicUtil.drawFilledBox(this.hopperPos, 1.0D, new Color(1.0F, 0.0F, 0.4F));
 
+            }
         }
     }
 
@@ -240,6 +261,11 @@ public class Auto32k extends Module {
         this.hopperPos = null;
         this.openAttempts = 0;
         timer.reset();
+    }
+
+    public enum Mode {
+        DISPENSER,
+        HOPPER;
     }
 
     public static class AutoUtil implements McWrapper {

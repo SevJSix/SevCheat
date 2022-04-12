@@ -22,12 +22,20 @@ public class Auto32kMode extends Command {
                     Auto32k.autoPlace = false;
                     Utils.sendMessage("Set auto32k mode to MANUAL_PLACE");
                     break;
+                case "hopper":
+                    Auto32k.mode = Auto32k.Mode.HOPPER;
+                    Utils.sendMessage("Set auto32k mode to MODE_HOPPER");
+                    break;
+                case "dispenser":
+                    Auto32k.mode = Auto32k.Mode.DISPENSER;
+                    Utils.sendMessage("Set auto32k mode to MODE_DISPENSER");
+                    break;
                 default:
                     Utils.sendMessage("Modes: auto, manual");
                     break;
             }
         } catch (Throwable t) {
-            Utils.sendMessage("Modes: auto, manual");
+            Utils.sendMessage("Modes: auto, manual, hopper, dispenser");
         }
     }
 }

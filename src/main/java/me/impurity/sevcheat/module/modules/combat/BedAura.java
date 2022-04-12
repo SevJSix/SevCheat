@@ -1,5 +1,6 @@
 package me.impurity.sevcheat.module.modules.combat;
 
+import me.impurity.sevcheat.event.PacketEvent;
 import me.impurity.sevcheat.event.PacketSendingEvent;
 import me.impurity.sevcheat.mixin.mixins.ICPacketPlayer;
 import me.impurity.sevcheat.module.Category;

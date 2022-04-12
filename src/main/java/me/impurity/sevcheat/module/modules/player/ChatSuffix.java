@@ -1,19 +1,16 @@
 package me.impurity.sevcheat.module.modules.player;
 
+import me.impurity.sevcheat.event.PacketEvent;
 import me.impurity.sevcheat.event.PacketSendingEvent;
 import me.impurity.sevcheat.mixin.mixins.ICPacketChatMessage;
 import me.impurity.sevcheat.module.Category;
 import me.impurity.sevcheat.module.Module;
 import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
-import scala.actors.threadpool.Arrays;
-
-import java.util.List;
 
 public class ChatSuffix extends Module {
 
-    public static String suffix =  "\uA731" + "\u1D07" + "\u1D20" + "\u029C" + "\u1D00" + "\u1D04" + "\u1D0B";
+    public static String suffix = "\uA731" + "\u1D07" + "\u1D20" + "\u029C" + "\u1D00" + "\u1D04" + "\u1D0B";
 
     public ChatSuffix() {
         super("ChatSuffix", Category.CLIENT, "add suffix to your chat messages");

@@ -1,9 +1,7 @@
 package me.impurity.sevcheat.module.modules.combat;
 
 import io.netty.buffer.Unpooled;
-import jdk.nashorn.internal.ir.Block;
 import me.impurity.sevcheat.SevCheat;
-import me.impurity.sevcheat.event.PacketRecievingEvent;
 import me.impurity.sevcheat.module.Category;
 import me.impurity.sevcheat.module.Module;
 import me.impurity.sevcheat.util.TimerUtil;
@@ -11,17 +9,8 @@ import me.impurity.sevcheat.util.Utils;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.client.CPacketChatMessage;
-import net.minecraft.network.play.client.CPacketClickWindow;
 import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketCustomPayload;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.util.Arrays;
 
 public class ServersideAuto32k extends Module {
 
